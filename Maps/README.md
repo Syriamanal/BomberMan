@@ -5,6 +5,12 @@ To download a map download the repository master zip file and copy the map files
 
 ==========
 
+Want your custom BomberMan world here?
+
+Send the file to Comedyman937@yahoo.com to request for it to be posted here!
+
+==========
+
 Download Repository:
 
 https://codeload.github.com/Comedyman937/BomberMan/zip/master
