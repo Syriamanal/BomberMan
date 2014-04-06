@@ -14,3 +14,9 @@ Click On The "Plugin" Folder Then BomberMan.php
 Download Maps:
 
 No maps available at this time! Please wait for the first official release of BomberMan!
+
+==========
+
+Download Repository:
+
+https://codeload.github.com/Comedyman937/BomberMan/zip/master
