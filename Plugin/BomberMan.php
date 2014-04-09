@@ -130,7 +130,7 @@ class BomberMan implements Plugin
     public function GameStarter()
     {
         if($this->BomberManActive == false){
-            $this->api->chat->broadcast("[BanHammer] Starting Game...");
+            $this->api->chat->broadcast("[BomberMan] Starting Game...");
             $this->BomberManActive = true;
         }
                 foreach($this->api->player->getAll() as $p){
