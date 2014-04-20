@@ -211,20 +211,6 @@ class BomberMan implements Plugin
     {
         switch($event)
         {
-            case "player.spawn":
-                if($this->BomberManActive == false){
-                    $this->playersOnline = $this->playersOnline + 1;
-                        }else{
-                            $data->close("There is currently a game in session!");
-                        }
-                                break;
-
-            case "player.connect":
-                if($playersOnline == $this->CONFIG["MaxPlayers"]){
-                    return false;
-                }
-                        break;
-
             case "entity.health.change":
                 return false;
                     break;
