@@ -255,7 +255,7 @@ class BomberMan implements Plugin
 
             case "tnt.block.explode":
                 if($data["block"] == $this->CONFIG["BomberWallBlock"]){
-                    console ("[BomberMan] " . $data["player"] . " Has destroyed a wall!");
+                    console ("[INFO] [BomberMan] " . $data["player"] . " Has destroyed a wall!");
                         }else{
                             return false;
                         }
@@ -263,7 +263,7 @@ class BomberMan implements Plugin
         }
     }
 
-    public function GameStarter() //TODO: Update GameStarter To ReWrite
+    public function GameStarter()
     {
         if($this->BomberManActive == false){
             $this->api->chat->broadcast("[BomberMan] Starting Game...");
@@ -299,9 +299,7 @@ class BomberMan implements Plugin
 
             foreach($this->api->player->getAll() as $p){
                     $this->api->console->run("kill " . $p);
-                }
-
-            $this->api->console->run("stop");
+            }
         }
     }
 
