@@ -157,7 +157,7 @@ class BomberMan implements Plugin
                 
                     $nbt->write(chr(NBT::TAG_STRING));
                     $nbt->writeTAG_String("Text1");
-                    $nbt->writeTAG_String("[BomberMan]);
+                    $nbt->writeTAG_String("[BomberMan]");
                 
                     $nbt->write(chr(NBT::TAG_STRING));
                     $nbt->writeTAG_String("Text2");
