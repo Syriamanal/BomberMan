@@ -212,25 +212,34 @@ class BomberMan implements Plugin
         switch($event)
         {
             case "entity.health.change":
-                return false;
+                if($data["target"]->level->getName() == $this->CONFIG["BomberManLevel"]){
+                    return false;
+                        }else{
+                            return;
+                        }
                     break;
 
             case "player.pickup":
-                return false;
+                if($data["player"]->level->getName() == $this->CONFIG["BomberManLevel"]){
+                    return false;
+                        }else{
+                            return;
+                        }
                     break;
 
             case "player.block.break":
-                if($this->api->ban->isOP($data) == true){
-                    return;
+                if($data["target"]->level->getName() == $this->CONFIG["BomberManLevel"]){
+                    return false;
                         }else{
-                            return false;
+                            return;
                         }
                                 break;
 
             case "player.block.place":
-                if($this->api->ban->isOP($data['player']) == true){
-                    return;
-                        }elseif(!($this->api->block->getItem(46))){
+                if($data["target"]->player->level->getName() == $this->CONFIG["BomberManLevel"] and $BomberManActive == false){
+                    return "[BomberMan] The Game Has Not Started Yet!";
+                    return false;
+                        }elseif(!($this->api->block->getItem(46)) and $BomberManActive == true){
                             return "[BomberMan] Only TNT Blocks Are Permitted on a BomberMan Server!";
                             return false;
                                 }elseif($BomberManActive == true){
@@ -254,7 +263,7 @@ class BomberMan implements Plugin
         }
     }
 
-    public function GameStarter()
+    public function GameStarter() //TODO: Update GameStarter To ReWrite
     {
         if($this->BomberManActive == false){
             $this->api->chat->broadcast("[BomberMan] Starting Game...");
