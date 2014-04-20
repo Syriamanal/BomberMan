@@ -4,7 +4,7 @@
 __PocketMine Plugin__
 name=BomberMan
 description=Make a path using TNT and kill the others!
-version=0.5.0
+version=0.6.1
 author=Comedyman937
 class=BomberMan
 apiversion=11,12
@@ -14,6 +14,9 @@ apiversion=11,12
 ===============
    Changelog
 ===============
+
+0.6.1
+- Added Tile Systems
 
 0.5.0
 - Initial Release
@@ -58,6 +61,7 @@ class BomberMan implements Plugin
         $this->api->addHandler("entity.health.change", array($this, "EventHandler"));
         $this->api->addHandler("player.pickup", array($this, "EventHandler"));
         $this->api->addHandler("player.block.break", array($this, "EventHandler"));
+        $this->api->addHandler("player.block.touch", array($this, "PlayerJoinBomberMan"));
         $this->api->addHandler("player.block.place", array($this, "EventHandler"));
         $this->api->addHandler("tnt.block.explode", array($this, "EventHandler"));
 
