@@ -66,6 +66,143 @@ class BomberMan implements Plugin
             $this->api->schedule($this->CONFIG["MinutesBeforeGame"]*20*60, array($this, "GameStarter"), true);
     }
 
+    public function PlayerJoinBomberMan($data, $event){
+        switch($event){
+            case "player.block.touch":
+
+                if(!($this->api->tile->get(new Position($data["target"]->x, $data["target"]->y, $data["target"]->z, $data["target"]->level)) instanceof Tile)){
+                    return;
+                }
+
+                $t = $this->api->tile->get(new Position($data["target"]->x, $data["target"]->y, $data["target"]->z, $data["target"]->level));
+
+                if(!($t instanceof Tile)){
+                    return;
+                }
+
+                    if($t->class != TILE_SIGN){
+                        return;
+                    }
+
+                        if($BomberManActive == false){
+                            $getGameStats = "Waiting...";
+                                }elseif($BomberManActive == true){
+                                    $getGameStats = "In Progress";
+                                        }else{
+                                            $getGameStats = "-=ERROR=-";
+                                        }
+
+                        if($playersOnline < $this->CONFIG["MaxPlayers"]){
+                            $Queued = $playersOnline;
+                                }elseif($playersOnline = $this->CONFIG["MaxPlayers"]){
+                                    $Queued = "GAME FULL";
+                                        }else{
+                                            $Queued = "-=ERROR=-";
+                                        }
+
+                        if(strtolower($t->data["Text1"]) == "[BomberMan]"){
+                            $t->data["Text2"] == $this->CONFIG["BomberManLevel"];
+                            $t->data["Text3"] == $Queued . "/" . $this->CONFIG["MaxPlayers"];
+                            $t->data["Text4"] == $getGameStats;
+                        }
+                        $pos = $this->api->level->getLevel($this->CONFIG["BomberManLevel"]);
+
+                            if($playersOnline == $this->CONFG["MaxPlayers"]){
+                                return "[BomberMan] Unable To Join!\nThe game is currently full!";
+                                return false;
+                                }else{
+                                    //tp player to the game
+                                }
+
+                            if($BomberManActive == true){
+                                return "[BomberMan] Unable To Join Game!\nThe game is currently in session!";
+                                return false;
+                                    }else{
+                                        //tp player to game
+                                    }
+               break;
+          }
+     }
+
+
+    public function updateBomberManSignText($tile, $target = false){
+        if(!($tile instanceof Tile)){
+            return;
+        }
+            if($tile->class != TILE_SIGN){
+                return;
+            }
+                    if($BomberManActive == false){
+                        $getGameStats = "Waiting...";
+                            }elseif($BomberManActive == true){
+                                $getGameStats = "In Progress";
+                                    }else{
+                                        $getGameStats = "-=ERROR=-";
+                                    }
+
+                        if($playersOnline < $this->CONFIG["MaxPlayers"]){
+                            $Queued = $playersOnline;
+                                }elseif($playersOnline = $this->CONFIG["MaxPlayers"]){
+                                    $Queued = "GAME FULL";
+                                        }else{
+                                            $Queued = "-=ERROR=-";
+                                        }
+
+                    $nbt = new NBT();
+                    $nbt->write(chr(NBT::TAG_COMPOUND)."\x00\x00");
+                
+                    $nbt->write(chr(NBT::TAG_STRING));
+                    $nbt->writeTAG_String("Text1");
+                    $nbt->writeTAG_String("[BomberMan]);
+                
+                    $nbt->write(chr(NBT::TAG_STRING));
+                    $nbt->writeTAG_String("Text2");
+                    $nbt->writeTAG_String($this->CONFIG["BomberManLevel"]);
+                        
+                    $nbt->write(chr(NBT::TAG_STRING));
+                    $nbt->writeTAG_String("Text3");
+                    $nbt->writeTAG_String($Queued . "/" . $this->CONFIG["MaxPlayers"]);
+                
+                    $nbt->write(chr(NBT::TAG_STRING));
+                    $nbt->writeTAG_String("Text4");
+                    $nbt->writeTAG_String($getGameStats);
+
+                    $nbt->write(chr(NBT::TAG_STRING));
+                    $nbt->writeTAG_String("id");
+                    $nbt->writeTAG_String($tile->class);
+                    $nbt->write(chr(NBT::TAG_INT));
+                    $nbt->writeTAG_String("x");
+                    $nbt->writeTAG_Int((int) $tile->x);
+        
+                    $nbt->write(chr(NBT::TAG_INT));
+                    $nbt->writeTAG_String("y");
+                    $nbt->writeTAG_Int((int) $tile->y);
+                                
+                    $nbt->write(chr(NBT::TAG_INT));
+                    $nbt->writeTAG_String("z");
+                    $nbt->writeTAG_Int((int) $tile->z);
+                                
+                    $nbt->write(chr(NBT::TAG_END)); 
+
+            $pk = new EntityDataPacket();
+            $pk->x = $tile->x;
+            $pk->y = $tile->y;
+            $pk->z = $tile->z;
+            $pk->namedtag = $nbt->binary;
+
+                if($target instanceof Player){
+                    $target->dataPacket($pk);
+                        }else{
+                            $players = $this->api->player->getAll($tile->level);
+                                foreach($players as $pIndex => $player){
+                                    if($player->spawned == false){
+                                        unset($players[$pIndex]);
+                                    }
+                        }
+                                            $this->api->player->broadcastPacket($players, $pk);
+        }
+    }
+
     public function EventHandler($data, $event)
     {
         switch($event)
